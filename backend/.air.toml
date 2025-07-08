@@ -1,0 +1,17 @@
+# backend/.air.toml
+
+# Основная конфигурация
+[build]
+  cmd = "go build -o main ."
+  bin = "main"
+  full_bin = ""
+  delay = 200
+  exclude_dir = ["vendor", "node_modules"]
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  exclude_file = []
+  follow_symlink = true
+  kill_delay = 500
+  log = "build.log"
+
+[log]
+  time = true

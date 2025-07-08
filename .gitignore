@@ -1,0 +1,20 @@
+# Global
+.DS_Store
+.env
+*.log
+*.sqlite
+tmp/
+dist/
+build/
+
+# Go
+/bin/
+/vendor/
+/*.exe
+/*.exe~
+*.test
+*.out
+
+# Node (на будущее)
+node_modules/
+.vite/

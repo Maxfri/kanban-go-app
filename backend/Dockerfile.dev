@@ -1,0 +1,15 @@
+# backend/Dockerfile.dev
+
+FROM golang:1.23.5
+
+WORKDIR /app
+
+# Установка air
+RUN go install github.com/cosmtrek/air@v1.49.0
+
+COPY . .
+
+# Копируем конфиг air (будет дальше)
+COPY .air.toml .air.toml
+
+CMD ["air"]
