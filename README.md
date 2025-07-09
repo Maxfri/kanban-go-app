@@ -1,6 +1,6 @@
 # 🧠 Kanban Go App
 
-A fullstack **Kanban board** with a Go backend, real-time updates over WebSocket, PostgreSQL storage, and hot-reloading dev setup via Docker.
+A fullstack **Kanban board** with a Go backend, WebSocket real-time sync, PostgreSQL storage, and modern React frontend — all powered by Docker.
 
 ---
 
@@ -9,19 +9,21 @@ A fullstack **Kanban board** with a Go backend, real-time updates over WebSocket
 - ✅ RESTful API for managing tasks
 - ✅ WebSocket broadcast for real-time updates (`task_created`, `task_updated`, `task_deleted`)
 - ✅ PostgreSQL database (Dockerized)
-- ✅ Auto-restart server on file change with [`air`](https://github.com/cosmtrek/air)
-- ✅ Clean architecture and modular code
+- ✅ Modern frontend (React + Vite + Tailwind + TanStack Query + Zustand)
+- ✅ Clean Evo Small architecture
+- ✅ Hot reload dev setup via Air (Go) and Vite (React)
+- ✅ Unified production build via Docker Compose
 
 ---
 
 ## 🧰 Tech Stack
 
-| Layer     | Tech                    |
-|-----------|-------------------------|
-| Backend   | Go 1.23, Gin, GORM      |
-| Realtime  | gorilla/websocket       |
-| Database  | PostgreSQL              |
-| DevTools  | Docker, Docker Compose, Air |
+| Layer     | Tech                                |
+|-----------|-------------------------------------|
+| Backend   | Go 1.23, Gin, GORM, gorilla/ws      |
+| Frontend  | React 18+, Vite, Zustand, Tailwind, TanStack Query |
+| Database  | PostgreSQL                          |
+| DevTools  | Docker, Docker Compose, Air         |
 
 ---
 
@@ -32,46 +34,76 @@ kanban-app/
 ├── backend/                # Go backend
 │   ├── main.go
 │   ├── .env.example
-│   ├── Dockerfile          # Production
-│   ├── Dockerfile.dev      # Development (Air)
+│   ├── Dockerfile
+│   ├── Dockerfile.dev
 │   ├── .air.toml
-│   ├── handlers/           # API controllers
-│   ├── models/             # DB schemas
-│   ├── db/                 # DB connection
-│   ├── ws/                 # WebSocket hub
-│   └── router/             # Route setup
+│   ├── handlers/
+│   ├── models/
+│   ├── db/
+│   ├── ws/
+│   └── router/
+├── frontend/               # React frontend
+│   ├── src/
+│   │   ├── app/
+│   │   ├── features/
+│   │   └── shared/
+│   ├── Dockerfile
+│   ├── index.html
+│   └── nginx.conf
 ├── docker-compose.yml
 ```
 
 ---
 
-## 🛠 Local Development (with hot reload)
+## ⚙️ Environment Setup
 
-1. Copy and edit `.env`:
+### 1. Copy environment file
 
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-2. Start dev containers:
+---
+
+## 🧪 Development (with hot reload)
+
+Start dev containers (Air for Go, Vite for React):
 
 ```bash
 docker compose up --build backend-dev
 ```
 
-3. API is now available at:  
-   → [http://localhost:8080/tasks](http://localhost:8080/tasks)
+Then in another terminal:
 
-4. WebSocket:  
-   → `ws://localhost:8080/ws`
+```bash
+npm install
+npm run dev
+```
 
 ---
 
-## 🛠 Production Build (optional)
+## 🚀 Full Production Build
+
+To build and run everything (backend + frontend + postgres):
 
 ```bash
-docker compose up --build backend
+docker compose up --build
 ```
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
+- WebSocket: ws://localhost:8080/ws
+
+---
+
+## 🔌 Nginx Proxy Setup
+
+The `frontend/nginx.conf` includes:
+
+- `/api/*` → backend
+- `/ws` → backend WebSocket
+
+Handled by Docker's internal network (`proxy_pass http://backend:8080;`)
 
 ---
 
@@ -81,10 +113,11 @@ docker compose up --build backend
 |--------|----------------|-----------------------|
 | GET    | `/tasks`       | Get all tasks         |
 | POST   | `/tasks`       | Create new task       |
-| PATCH  | `/tasks/:id`   | Update task status    |
+| PATCH  | `/tasks/:id`   | Update task           |
 | DELETE | `/tasks/:id`   | Delete task           |
 
 **Payload example:**
+
 ```json
 {
   "title": "Make frontend",
@@ -103,7 +136,8 @@ docker compose up --build backend
   "payload": {
     "id": 1,
     "title": "Make frontend",
-    "status": "todo"
+    "status": "todo",
+    "color": "#60a5fa"
   }
 }
 ```
@@ -112,13 +146,17 @@ docker compose up --build backend
 
 ## ✅ Todo / Next Steps
 
-- [ ] Frontend (React + Zustand + Tailwind)
+- [x] Frontend (React + Zustand + Tailwind)
+- [x] WebSocket sync
+- [x] Dockerized fullstack setup
+- [ ] Drag & drop with dnd-kit
 - [ ] CI/CD (GitHub Actions)
-- [ ] Auth / login
+- [ ] User auth
 - [ ] Multi-board support
+- [ ] Unit / e2e tests
 
 ---
 
 ## 📄 License
 
-MIT © 2025 Yaroslav
+MIT © 2025 Maxfri

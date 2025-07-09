@@ -14,17 +14,17 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
 
-  backend:
-    build:
-      context: ./backend
-    container_name: kanban-backend
-    depends_on:
-      - postgres
-    ports:
-      - "8080:8080"
-    env_file:
-      - ./backend/.env
-    restart: unless-stopped
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   container_name: kanban-backend
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "8080:8080"
+  #   env_file:
+  #     - ./backend/.env
+  #   restart: unless-stopped
 
   backend-dev:
     build:
@@ -40,6 +40,13 @@ services:
     depends_on:
       - postgres
 
+  kanban-frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      - backend-dev
+    ports:
+      - "3000:80"
 
 volumes:
   pg_data:
