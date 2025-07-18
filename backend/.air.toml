@@ -2,7 +2,7 @@
 
 # Основная конфигурация
 [build]
-  cmd = "go build -o main ."
+  cmd = "go build -o main . && chmod +x main"
   bin = "main"
   full_bin = ""
   delay = 200

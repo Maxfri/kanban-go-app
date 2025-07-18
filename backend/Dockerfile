@@ -13,6 +13,9 @@ COPY . .
 # Компилируем бинарник (без CGO)
 RUN go build -o main .
 
+# Делаем бинарник исполняемым
+RUN chmod +x main
+
 EXPOSE 8080
 
 CMD ["./main"]
